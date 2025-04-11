@@ -19,4 +19,16 @@ export const getAnswers = async (req, res) => {
     return errorResponse({ res, message: "Unable to fetch answers." });
   }
 };
-  
+
+export const createAnswer = async (req, res) => {
+  try {
+    const { questionId } = req.params;
+    const { content } = req.body;
+
+    await answerRepo.create({ content, questionId });
+
+    return successResponse({ res, message: "Answer created successfully." });
+  } catch (error) {
+    return errorResponse({ res, message: "Unable to create answers." });
+  }
+};
