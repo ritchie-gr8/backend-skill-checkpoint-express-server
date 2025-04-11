@@ -28,7 +28,13 @@ const findById = async (id) => {
 };
 
 const findByTitleAndCategory = async ({ title, category }) => {
-  let query = "SELECT id, title, description, category FROM questions";
+  let query = `
+    SELECT q.id, q.title, q.description, q.category, COALESCE(SUM(qv.vote), 0) AS total_vote
+    FROM questions q
+    LEFT JOIN question_votes qv
+    ON q.id = qv.question_id
+  `;
+
   const params = [];
   const conditions = [];
 
@@ -45,6 +51,8 @@ const findByTitleAndCategory = async ({ title, category }) => {
   if (conditions.length > 0) {
     query += ` WHERE ${conditions.join(" AND ")}`;
   }
+
+  query += ' GROUP BY q.id, q.title, q.description, q.category ORDER BY q.id';
 
   const { rows } = await connectionPool.query(query, params);
 
