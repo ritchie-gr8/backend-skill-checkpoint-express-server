@@ -16,6 +16,7 @@ export const getAnswers = async (req, res) => {
 
     return successResponse({ res, data: answers });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to fetch answers." });
   }
 };
@@ -29,6 +30,7 @@ export const createAnswer = async (req, res) => {
 
     return successResponse({ res, message: "Answer created successfully." });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to create answers." });
   }
 };
@@ -44,6 +46,7 @@ export const deleteAnswers = async (req, res) => {
       message: "All answers for the question have been deleted successfully.",
     });
   } catch (error) {
+    console.log(error)
     return errorResponse({
       res,
       message: "Unable to delete answers.",

@@ -14,11 +14,20 @@ const findAllByQuestionId = async (questionId) => {
         a.question_id = $1
       GROUP BY 
         a.id, a.content
-      ORDER BY total_vote`,
+      ORDER BY total_vote DESC`,
     [questionId]
   );
 
   return rows;
+};
+
+const findById = async (answerId) => {
+  const { rows } = await connectionPool.query(
+    "SELECT id, content FROM answers WHERE id = $1",
+    [answerId]
+  );
+
+  return rows?.length > 0 ? rows[0] : null;
 };
 
 const create = async (answer) => {
@@ -43,6 +52,7 @@ const answerRepo = {
   findAllByQuestionId,
   create,
   removeAnswers,
+  findById,
 };
 
 export default answerRepo;

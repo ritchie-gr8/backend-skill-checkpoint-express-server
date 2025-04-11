@@ -9,6 +9,7 @@ export const checkHealth = async (req, res) => {
       message: "Server API is working 🚀",
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       status: "ERROR",
       db: "Disconnected ❌",

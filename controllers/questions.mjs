@@ -27,6 +27,7 @@ export const getQuestion = async (req, res) => {
 
     return successResponse({ res, data: question });
   } catch (error) {
+    console.log(error);
     return errorResponse({ res, message: "Unable to fetch questions." });
   }
 };
@@ -39,6 +40,7 @@ export const getQuestionByTitleAndCategory = async (req, res) => {
 
     return successResponse({ res, data: questions });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to fetch questions." });
   }
 };
@@ -53,6 +55,7 @@ export const createQuestion = async (req, res) => {
       status: HTTP_STATUS.CREATED,
     });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to create question." });
   }
 };
@@ -61,15 +64,6 @@ export const updateQuestion = async (req, res) => {
   try {
     const { questionId } = req.params;
 
-    const question = await questionRepo.findById(questionId);
-    if (!question) {
-      return errorResponse({
-        res,
-        message: "Question not found",
-        status: HTTP_STATUS.NOT_FOUND,
-      });
-    }
-
     await questionRepo.update(questionId, req.body);
 
     return successResponse({
@@ -77,6 +71,7 @@ export const updateQuestion = async (req, res) => {
       message: "Question updated successfully.",
     });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to update question." });
   }
 };
@@ -85,15 +80,6 @@ export const deleteQuestion = async (req, res) => {
   try {
     const { questionId } = req.params;
 
-    const question = await questionRepo.findById(questionId);
-    if (!question) {
-      return errorResponse({
-        res,
-        message: "Question not found",
-        status: HTTP_STATUS.NOT_FOUND,
-      });
-    }
-
     await questionRepo.remove(questionId);
 
     return successResponse({
@@ -101,6 +87,7 @@ export const deleteQuestion = async (req, res) => {
       message: "Question post has been deleted successfully",
     });
   } catch (error) {
+    console.log(error)
     return errorResponse({ res, message: "Unable to delete question." });
   }
 };

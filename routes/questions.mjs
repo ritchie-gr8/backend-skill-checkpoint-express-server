@@ -9,8 +9,11 @@ import {
 } from "../controllers/questions.mjs";
 import {
   validateQuestion,
+  validateQuestionExists,
   validateQuestionSearchTerm,
 } from "../middlewares/questions.mjs";
+import { validateVote } from "../middlewares/vote.mjs";
+import { createQuestionVote } from "../controllers/vote.mjs";
 
 const questionsRouter = Router();
 
@@ -20,10 +23,24 @@ questionsRouter.get(
   [validateQuestionSearchTerm],
   getQuestionByTitleAndCategory
 );
-questionsRouter.get("/:questionId", getQuestion);
 
+questionsRouter.post(
+  "/:questionId/vote",
+  [validateQuestionExists, validateVote],
+  createQuestionVote
+);
+
+questionsRouter.get("/:questionId", getQuestion);
 questionsRouter.post("/", [validateQuestion], createQuestion);
-questionsRouter.put("/:questionId", [validateQuestion], updateQuestion);
-questionsRouter.delete("/:questionId", deleteQuestion);
+questionsRouter.put(
+  "/:questionId",
+  [validateQuestionExists, validateQuestion],
+  updateQuestion
+);
+questionsRouter.delete(
+  "/:questionId",
+  [validateQuestionExists],
+  deleteQuestion
+);
 
 export default questionsRouter;

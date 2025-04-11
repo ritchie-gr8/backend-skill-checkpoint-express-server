@@ -2,14 +2,25 @@ import connectionPool from "../utils/db.mjs";
 
 const findAll = async () => {
   const { rows } = await connectionPool.query(
-    "SELECT id, title, description, category FROM questions"
+    `SELECT q.id, q.title, q.description, q.category, COALESCE(SUM(qv.vote), 0) AS total_vote
+     FROM questions q
+     LEFT JOIN question_votes qv
+     ON q.id = qv.question_id
+     GROUP BY q.id, q.title, q.description, q.category
+     ORDER BY q.id asc
+    `
   );
   return rows;
 };
 
 const findById = async (id) => {
   const { rows } = await connectionPool.query(
-    "SELECT id, title, description, category FROM questions WHERE id = $1",
+    `SELECT q.id, q.title, q.description, q.category, COALESCE(SUM(qv.vote), 0) AS total_vote
+     FROM questions q
+     LEFT JOIN question_votes qv
+     ON q.id = qv.question_id
+     WHERE q.id = $1
+     GROUP BY q.id, q.title, q.description, q.category`,
     [id]
   );
 
