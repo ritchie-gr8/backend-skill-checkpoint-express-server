@@ -16,6 +16,30 @@ const findById = async (id) => {
   return rows?.length > 0 ? rows[0] : null;
 };
 
+const findByTitleAndCategory = async ({ title, category }) => {
+  let query = "SELECT id, title, description, category FROM questions";
+  const params = [];
+  const conditions = [];
+
+  if (title) {
+    params.push(`%${title}%`);
+    conditions.push(`title ILIKE $${params.length}`);
+  }
+
+  if (category) {
+    params.push(`%${category}%`);
+    conditions.push(`category ILIKE $${params.length}`);
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  const { rows } = await connectionPool.query(query, params);
+
+  return rows;
+};
+
 const create = async (question) => {
   const { title, description, category } = question;
 
@@ -55,6 +79,7 @@ const remove = async (id) => {
 const questionRepo = {
   findAll,
   findById,
+  findByTitleAndCategory,
   create,
   update,
   remove,

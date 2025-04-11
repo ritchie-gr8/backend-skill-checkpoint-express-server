@@ -31,6 +31,18 @@ export const getQuestion = async (req, res) => {
   }
 };
 
+export const getQuestionByTitleAndCategory = async (req, res) => {
+  try {
+    const { title, category } = req.query;
+
+    const questions = await questionRepo.findByTitleAndCategory({ title, category });
+
+    return successResponse({ res, data: questions });
+  } catch (error) {
+    return errorResponse({ res, message: "Unable to fetch questions." });
+  }
+};
+
 export const createQuestion = async (req, res) => {
   try {
     await questionRepo.create(req.body);
