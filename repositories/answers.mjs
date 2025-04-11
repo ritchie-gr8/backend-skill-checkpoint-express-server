@@ -30,9 +30,19 @@ const create = async (answer) => {
   return rows[0];
 };
 
+const removeAnswers = async (questionId) => {
+  const { rows } = await connectionPool.query(
+    "DELETE FROM answers WHERE question_id = $1",
+    [questionId]
+  );
+
+  return rows[0];
+};
+
 const answerRepo = {
   findAllByQuestionId,
   create,
+  removeAnswers,
 };
 
 export default answerRepo;

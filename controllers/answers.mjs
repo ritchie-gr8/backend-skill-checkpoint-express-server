@@ -32,3 +32,21 @@ export const createAnswer = async (req, res) => {
     return errorResponse({ res, message: "Unable to create answers." });
   }
 };
+
+export const deleteAnswers = async (req, res) => {
+  try {
+    const { questionId } = req.params;
+
+    await answerRepo.removeAnswers(questionId);
+
+    return successResponse({
+      res,
+      message: "All answers for the question have been deleted successfully.",
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: "Unable to delete answers.",
+    });
+  }
+};
